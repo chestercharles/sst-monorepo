@@ -1,0 +1,48 @@
+import { getEndpointPlugin } from "@smithy/middleware-endpoint";
+import { getSerdePlugin } from "@smithy/middleware-serde";
+import { Command as $Command } from "@smithy/smithy-client";
+import { SMITHY_CONTEXT_KEY, } from "@smithy/types";
+import { PutTargetsRequestFilterSensitiveLog } from "../models/models_0";
+import { de_PutTargetsCommand, se_PutTargetsCommand } from "../protocols/Aws_json1_1";
+export { $Command };
+export class PutTargetsCommand extends $Command {
+    static getEndpointParameterInstructions() {
+        return {
+            UseFIPS: { type: "builtInParams", name: "useFipsEndpoint" },
+            Endpoint: { type: "builtInParams", name: "endpoint" },
+            Region: { type: "builtInParams", name: "region" },
+            UseDualStack: { type: "builtInParams", name: "useDualstackEndpoint" },
+        };
+    }
+    constructor(input) {
+        super();
+        this.input = input;
+    }
+    resolveMiddleware(clientStack, configuration, options) {
+        this.middlewareStack.use(getSerdePlugin(configuration, this.serialize, this.deserialize));
+        this.middlewareStack.use(getEndpointPlugin(configuration, PutTargetsCommand.getEndpointParameterInstructions()));
+        const stack = clientStack.concat(this.middlewareStack);
+        const { logger } = configuration;
+        const clientName = "EventBridgeClient";
+        const commandName = "PutTargetsCommand";
+        const handlerExecutionContext = {
+            logger,
+            clientName,
+            commandName,
+            inputFilterSensitiveLog: PutTargetsRequestFilterSensitiveLog,
+            outputFilterSensitiveLog: (_) => _,
+            [SMITHY_CONTEXT_KEY]: {
+                service: "AWSEvents",
+                operation: "PutTargets",
+            },
+        };
+        const { requestHandler } = configuration;
+        return stack.resolve((request) => requestHandler.handle(request.request, options || {}), handlerExecutionContext);
+    }
+    serialize(input, context) {
+        return se_PutTargetsCommand(input, context);
+    }
+    deserialize(output, context) {
+        return de_PutTargetsCommand(output, context);
+    }
+}
