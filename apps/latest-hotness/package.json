@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "sst reportCdkAssetsVersion",
+    "reportCdkAssetsVersion": "sst reportCdkAssetsVersion",
+    "dev": "sst dev",
     "build": "sst build",
     "deploy": "sst deploy",
     "remove": "sst remove",
@@ -22,6 +23,7 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "cdk-assets": "2.101.1",
     "zod": "^3.22.4"
   }
 }
